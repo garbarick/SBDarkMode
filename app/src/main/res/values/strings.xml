@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SBDarkMode</string>
+    <string name="car_mode">Car Mode</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="auto">Auto</string>
+    
+</resources>
