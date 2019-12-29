@@ -19,6 +19,7 @@
         </activity>
         <receiver
             android:enabled="true"
+            android:exported="true"
             android:name=".StartUp"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
