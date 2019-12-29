@@ -19,9 +19,9 @@ CompoundButton.OnCheckedChangeListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        uiManager = getService(Context.UI_MODE_SERVICE);
-        carMode = getView(R.id.carMode);
-        nightMode = getView(R.id.nightMode);
+        uiManager = Tools.getService(this, Context.UI_MODE_SERVICE);
+        carMode = Tools.getView(this, R.id.carMode);
+        nightMode = Tools.getView(this, R.id.nightMode);
         
         boolean enable = initCarMode();
         radiosEnable(enable);
@@ -30,17 +30,7 @@ CompoundButton.OnCheckedChangeListener
         nightMode.setOnCheckedChangeListener(this);
         carMode.setOnCheckedChangeListener(this);
     }
-    
-    private <T> T getView(int id)
-    {
-        return (T) findViewById(id);
-    }
-
-    private <T> T getService(String id)
-    {
-        return (T) getSystemService(id);
-    }
-    
+        
     private boolean initCarMode()
     {
         boolean enable = 3 == uiManager.getCurrentModeType();
@@ -50,65 +40,44 @@ CompoundButton.OnCheckedChangeListener
     
     private void radioEnable(int id, boolean enable)
     {
-        RadioButton radio = getView(id);
+        RadioButton radio = Tools.getView(this, id);
         radio.setEnabled(enable);
     }
     
     private void radiosEnable(boolean enable)
     {
-        radioEnable(R.id.light, enable);
-        radioEnable(R.id.dark, enable);
-        radioEnable(R.id.auto, enable);
+        for (int id : Constants.ID_2_MODE.keySet())
+        {
+            radioEnable(id, enable);            
+        }
     }
     
     private void initNightMode()
     {
         int mode = uiManager.getNightMode();
-        int id;
-        switch(mode)
+        if (!Constants.MODE_2_ID.containsKey(mode))
         {
-            case UiModeManager.MODE_NIGHT_NO:
-                id = R.id.light;
-                break;
-
-            case UiModeManager.MODE_NIGHT_YES:
-                id = R.id.dark;
-                break;
-
-            case UiModeManager.MODE_NIGHT_AUTO:
-                id = R.id.auto;
-                break;
- 
-            default:
-                return;
+            return;
         }
-        RadioButton radio = getView(id);
+        RadioButton radio = Tools.getView(this, Constants.MODE_2_ID.get(mode));
         radio.setChecked(true);
     }
     
     @Override
     public void onCheckedChanged(RadioGroup view, int id)
     {
-        switch(id)
+        if (!Constants.ID_2_MODE.containsKey(id))
         {
-            case R.id.light:
-                uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-                break;
-
-            case R.id.dark:
-                uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-                break;
-
-            case R.id.auto:
-                uiManager.setNightMode(UiModeManager.MODE_NIGHT_AUTO);
-                break;
+            return;
         }
+        uiManager.setNightMode(Constants.ID_2_MODE.get(id));
     }
-    
+
     @Override
     public void onCheckedChanged(CompoundButton button, boolean checked)
     {
         radiosEnable(checked);
+        saveCarMode(checked);
         if (checked)
         {
             uiManager.enableCarMode(0);
@@ -117,5 +86,14 @@ CompoundButton.OnCheckedChangeListener
         {
             uiManager.disableCarMode(0);
         }
+    }
+    
+    private void saveCarMode(boolean enable)
+    {
+        SharedPreferences preferences = getSharedPreferences(Constants.APP_PARAMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit= preferences.edit();
+
+        edit.putBoolean(Constants.CAR_MODE, enable);
+        edit.commit();
     }
 }
