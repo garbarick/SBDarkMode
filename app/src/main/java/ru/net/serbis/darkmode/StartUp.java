@@ -8,9 +8,12 @@ public class StartUp extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        if (Tools.noNeedCarMod())
+        {
+            return;
+        }
         UiModeManager uiManager = Tools.getService(context, Context.UI_MODE_SERVICE);
         boolean systemMode = 3 == uiManager.getCurrentModeType();
-        
         if (systemMode)
         {
             return;

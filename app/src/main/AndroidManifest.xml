@@ -3,7 +3,8 @@
     package="ru.net.serbis.darkmode">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
+    <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE"/>
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/main"
@@ -27,6 +28,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </receiver>
+        <service
+            android:label="@string/night_mode"
+            android:icon="@drawable/main"
+            android:name=".QuickButton"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
-
 </manifest>

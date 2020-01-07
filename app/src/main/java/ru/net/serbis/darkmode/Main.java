@@ -3,6 +3,7 @@ package ru.net.serbis.darkmode;
 import android.app.*;
 import android.content.*;
 import android.os.*;
+import android.view.*;
 import android.widget.*;
 
 public class Main extends Activity implements
@@ -33,8 +34,18 @@ CompoundButton.OnCheckedChangeListener
         
     private boolean initCarMode()
     {
-        boolean enable = 3 == uiManager.getCurrentModeType();
-        carMode.setChecked(enable);
+        boolean enable = Tools.noNeedCarMod();
+        if (enable)
+        {
+            carMode.setVisibility(View.GONE);
+            TextView view = Tools.getView(this, R.id.carModeTitle);
+            view.setVisibility(View.GONE);
+        }
+        else
+        {
+            enable = 3 == uiManager.getCurrentModeType();
+            carMode.setChecked(enable);
+        }
         return enable;
     }
     
