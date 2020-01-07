@@ -24,6 +24,14 @@ public interface Constants
         }
     };
     
+    Map<Integer, Integer> MODE_2_THEME =  new HashMap<Integer, Integer>()
+    {
+        {
+            put(UiModeManager.MODE_NIGHT_NO, android.R.style.Theme_DeviceDefault_Light);
+            put(UiModeManager.MODE_NIGHT_AUTO, android.R.style.Theme_DeviceDefault);
+        }
+    };
+    
     String APP_PARAMS = "app_params";
     String CAR_MODE = "car_mode";
 }

@@ -17,10 +17,12 @@ CompoundButton.OnCheckedChangeListener
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        uiManager = Tools.getService(this, Context.UI_MODE_SERVICE);
+        changeThem();
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        uiManager = Tools.getService(this, Context.UI_MODE_SERVICE);
         carMode = Tools.getView(this, R.id.carMode);
         nightMode = Tools.getView(this, R.id.nightMode);
         
@@ -30,6 +32,15 @@ CompoundButton.OnCheckedChangeListener
         
         nightMode.setOnCheckedChangeListener(this);
         carMode.setOnCheckedChangeListener(this);
+    }
+    
+    private void changeThem()
+    {
+        int mode = uiManager.getNightMode();
+        if (Constants.MODE_2_THEME.containsKey(mode))
+        {
+            setTheme(Constants.MODE_2_THEME.get(mode));
+        }
     }
         
     private boolean initCarMode()
